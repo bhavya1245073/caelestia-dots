@@ -4,7 +4,7 @@ local fn   = require("utils.functions")
 hl.on("hyprland.start", function()
     -- Keyring and auth
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
-    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    hl.exec_cmd(vars.polkitAgentCmd)
 
     -- Clipboard history
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
@@ -19,14 +19,22 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-size " .. vars.cursorSize)
 
     -- Location provider and night light
-    hl.exec_cmd("/usr/lib/geoclue-2.0/demos/agent")
-    hl.exec_cmd("sleep 1 && gammastep")
+    hl.exec_cmd(vars.geoclueAgentCmd)
+    hl.exec_cmd("sleep 1 && " .. vars.nightLightCmd)
 
     -- Forward bluetooth media commands to MPRIS
     hl.exec_cmd("mpris-proxy")
 
-    -- Start shell
-    hl.exec_cmd("caelestia shell -d")
+    -- Extra per-host autostarts, appended by the user via hypr-vars.lua.
+    for _, cmd in ipairs(vars.extraExecs or {}) do
+        hl.exec_cmd(cmd)
+    end
+
+    -- Start shell. Skipped when something else owns the shell's lifetime,
+    -- e.g. a systemd user unit on NixOS.
+    if vars.startShell then
+        hl.exec_cmd("caelestia shell -d")
+    end
 end)
 
 -- Resizer listeners

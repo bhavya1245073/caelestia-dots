@@ -54,6 +54,18 @@ return {
     cursorSize                 = 24,
     sleepGestureCmd            = "systemctl suspend-then-hibernate",
 
+    -- Autostart commands. Distro-specific absolute paths live here rather than
+    -- inline in execs.lua, so a NixOS/Guix store path is a hypr-vars.lua
+    -- override instead of a patch.
+    polkitAgentCmd             = "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1",
+    geoclueAgentCmd            = "/usr/lib/geoclue-2.0/demos/agent",
+    nightLightCmd              = "gammastep",
+    extraExecs                 = {},
+
+    -- Whether execs.lua starts the shell itself. Turn this off when a service
+    -- manager owns the shell (e.g. the systemd user unit on NixOS).
+    startShell                 = true,
+
     ------------------
     ---- KEYBINDS ----
     ------------------
