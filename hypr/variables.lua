@@ -156,7 +156,8 @@ return {
 
     -- Clipboard and emoji picker
     kbClipboard                = "SUPER + V",
-    kbClipboardDel             = "SUPER + ALT + V",
+    -- No kbClipboardDel: deleting an entry is Shift+Delete inside the launcher's
+    -- clipboard mode, rather than a separate picker opened in a delete mode.
     kbClipboardPasteLatest     = "CTRL + SHIFT + ALT + V",
     kbEmoji                    = "SUPER + Period",
 }
